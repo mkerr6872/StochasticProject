@@ -29,7 +29,7 @@ def firstOrderChain():
 
     for line in fileptr:
         #Remove punctuation
-        tempLine = re.sub(r"[,.;@#?!&$]+\ *", " ", line)
+        tempLine = re.sub(r"[,;@#?!&$]+\ *", " ", line)
         for count,word in enumerate(tempLine.split()):
             wordCount = len(tempLine.split())
             #All lowercase to reduce duplicates
@@ -274,12 +274,12 @@ def nOrderChain(order):
     wordList = []
     countForward = np.zeros(transitionMatrixSize)
     #Open file
-    fileptr = open("test2.txt", "r")
+    fileptr = open("carsData3.txt", "r")
     for line in fileptr:
         firstToken = []
         firstToken.append(startHolder)
         #Remove punctuation
-        tempLine = re.sub(r"[,.;@#?!&$]+\ *", " ", line)
+        tempLine = re.sub(r"[,;@#&$]+\ *", " ", line)
         wordCount = len(tempLine.split())
         if wordCount > order:
             for count,word in enumerate(tempLine.split()):
@@ -336,9 +336,7 @@ def nOrderSentenceGenerator(wordList, transitionForwards, countForward, order):
             if any(seedWord in x for x in wordList):
                 startChoice = [seedWord in x for x in wordList]
                 startChoice = [i for i, x in enumerate(startChoice) if x]
-                print(startChoice)
                 token = wordList[random.choice(startChoice)]
-                print(token)
                 inputFlag = True
             else: 
                 print("Please select another seed word\n")
@@ -354,6 +352,7 @@ def nOrderSentenceGenerator(wordList, transitionForwards, countForward, order):
                 sentence = f"{sentence} {token[i]}"
         #Backwards
         tokenIndex = wordList.index(token)
+        originalIndex = tokenIndex
         while sentFlag == False:
             probFlag = False
             probDenominator = countForward[tokenIndex]
@@ -364,7 +363,7 @@ def nOrderSentenceGenerator(wordList, transitionForwards, countForward, order):
                 while probFlag == False:
                     probSum = probSum + transitionForwards[i, tokenIndex]
                     if probSum >= randWord:
-                        tempToken = wordList[i]
+                        tempToken = list(wordList[i])
                         tokenIndex = i
                         if tempToken[0] == startHolder:
                             probFlag = True
@@ -378,7 +377,7 @@ def nOrderSentenceGenerator(wordList, transitionForwards, countForward, order):
                 sentFlag = True 
         sentFlag = False
         #forwards
-        tokenIndex = wordList.index(token)
+        tokenIndex = originalIndex
         while sentFlag == False:
             probFlag = False
             probDenominator = countForward[tokenIndex]
@@ -389,13 +388,13 @@ def nOrderSentenceGenerator(wordList, transitionForwards, countForward, order):
                 while probFlag == False:
                     probSum = probSum + transitionForwards[tokenIndex, i]
                     if probSum >= randWord:
-                        tempToken = wordList[i]
+                        tempToken = list(wordList[i])
                         tokenIndex = i
                         if tempToken[order-1] == endHolder:
                             probFlag = True
                             sentFlag = True
                         else:
-                            sentence = f"{sentence} {tempToken[1]}"
+                            sentence = f"{sentence} {tempToken[order-1]}"
                             probFlag = True
                     else:
                         i+=1
@@ -423,6 +422,7 @@ if __name__ == '__main__':
     #print(len(wList))
     #secondOrderSentenceGenerator(wList, tForward, tbackwards, cForward)
     wList, tForward, cForward = nOrderChain(3)
+    print(len(wList))
     nOrderSentenceGenerator(wList, tForward, cForward, 3)
 
 
