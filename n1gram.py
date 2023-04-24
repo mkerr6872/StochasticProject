@@ -4,11 +4,12 @@ import string
 import random
 import praw
 import re
+import timeit
 
 
 startHolder = "azaaaa"
 endHolder = "zazzzz"
-transitionMatrixSize = 35000
+transitionMatrixSize = 51000
 
 
 def firstOrderChain():
@@ -29,7 +30,7 @@ def firstOrderChain():
 
     for line in fileptr:
         #Remove punctuation
-        tempLine = re.sub(r"[,;@#?!&$]+\ *", " ", line)
+        tempLine = re.sub(r"[,@#&$]+\ *", " ", line)
         for count,word in enumerate(tempLine.split()):
             wordCount = len(tempLine.split())
             #All lowercase to reduce duplicates
@@ -274,12 +275,12 @@ def nOrderChain(order):
     wordList = []
     countForward = np.zeros(transitionMatrixSize)
     #Open file
-    fileptr = open("carsData3.txt", "r")
+    fileptr = open("carsData.txt", "r")
     for line in fileptr:
         firstToken = []
         firstToken.append(startHolder)
         #Remove punctuation
-        tempLine = re.sub(r"[,;@#&$]+\ *", " ", line)
+        tempLine = re.sub(r"[,@#&$]+\ *", " ", line)
         wordCount = len(tempLine.split())
         if wordCount > order:
             for count,word in enumerate(tempLine.split()):
@@ -413,6 +414,31 @@ def commentScraper():
         for top_level_comment in post.comments:
             rDataCars.write(top_level_comment.body)
 
+def testTime():
+    n1 = []
+    n2 = []
+    n3 = []
+    n4 = []
+    for i in range(5):
+        startTime = timeit.default_timer()
+        wList, tForward, tbackwards, cForward = firstOrderChain()
+        n1.append(timeit.default_timer()-startTime)
+    print(n1)
+    for i in range(5):
+        startTime = timeit.default_timer()
+        wList, tForward, cForward = nOrderChain(2)
+        n2.append(timeit.default_timer()-startTime)
+    print(n2)
+    for i in range(5):
+        startTime = timeit.default_timer()
+        wList, tForward, cForward = nOrderChain(3)
+        n3.append(timeit.default_timer()-startTime)
+    print(n3)        
+    for i in range(5):
+        startTime = timeit.default_timer()
+        wList, tForward, cForward = nOrderChain(4)
+        n4.append(timeit.default_timer()-startTime)
+    print(n4)    
 if __name__ == '__main__':
     #commentScraper()
     #wList, tForward, tbackwards, cForward = firstOrderChain()
@@ -421,9 +447,11 @@ if __name__ == '__main__':
     #wList, tForward, tbackwards, cForward = secondOrderChain()
     #print(len(wList))
     #secondOrderSentenceGenerator(wList, tForward, tbackwards, cForward)
-    wList, tForward, cForward = nOrderChain(4)
-    print(len(wList))
-    nOrderSentenceGenerator(wList, tForward, cForward, 4)
+    #wList, tForward, cForward = nOrderChain(2)
+    #print(len(wList))
+    #nOrderSentenceGenerator(wList, tForward, cForward, 2)
+
+    testTime()
 
 
 
