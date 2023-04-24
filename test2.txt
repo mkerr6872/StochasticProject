@@ -1,0 +1,17 @@
+I like dogs.
+I hate cows.
+I like cats.
+I hate deer.
+I eat food
+I eat nothing.
+
+All dogs like deer.
+All dogs hate cows.
+All cats like deer.
+All cats hate cows.
+
+She hates dogs
+He loves dogs
+
+I like dogs that go to the market to play with cows and cats. 
+This, on the otherhand, is just to see: punctuation is a difficult problem!
