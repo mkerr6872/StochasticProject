@@ -421,9 +421,9 @@ if __name__ == '__main__':
     #wList, tForward, tbackwards, cForward = secondOrderChain()
     #print(len(wList))
     #secondOrderSentenceGenerator(wList, tForward, tbackwards, cForward)
-    wList, tForward, cForward = nOrderChain(3)
+    wList, tForward, cForward = nOrderChain(4)
     print(len(wList))
-    nOrderSentenceGenerator(wList, tForward, cForward, 3)
+    nOrderSentenceGenerator(wList, tForward, cForward, 4)
 
 
 
